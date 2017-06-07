@@ -90,27 +90,23 @@ namespace NodeCubeChat
             app.UseStaticFiles();
 
             app.UseIdentity();
-
-            // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
-
+            
             //app.UseFacebookAuthentication(new FacebookOptions()
             //{
-            //    AppId = "1755620094679482",
-            //    AppSecret = "548dcd9bc71af6a65c5defa507686997"
+            //    AppId = "",
+            //    AppSecret = ""
             //});
 
-            //Baca error 500 zbog DataProtection-a, nema puno informacija o pogrešci no uputa za podešavanje praćena u potpunosti.
             //app.UseTwitterAuthentication(new TwitterOptions()
             //{
-            //    ConsumerKey = "AlBHfK2YYPYkmTIZVgT9fQnrG",
-            //    ConsumerSecret = "d9sxBecc7frIF2uyHhW71mCdA3pzxfpKk2Xm8SOMtrd44k9a4W"
+            //    ConsumerKey = "",
+            //    ConsumerSecret = ""
             //});
 
-            //Vraća access denied bez nekog dobrog razloga, podešeno kao na testnom projektu ali ovdje ne želi proć
             //app.UseGoogleAuthentication(new GoogleOptions()
             //{
-            //    ClientId = "917128493679-minfopf66a6jgu1furskl0n1r497hpo5.apps.googleusercontent.com",
-            //    ClientSecret = "XQLjP5Z86OSIhhmhzf75XYlv"
+            //    ClientId = "",
+            //    ClientSecret = ""
 
             //});
 
