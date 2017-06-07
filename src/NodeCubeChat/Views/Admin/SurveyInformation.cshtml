@@ -1,0 +1,90 @@
+﻿@using NodeCubeChat.Models.AdminViewModels;
+
+@model SurveyInformationViewModel
+@{
+    ViewData["Title"] = "Survey Information";
+}
+
+<div class="Manage-Container">
+    <a asp-action="Index" asp-controller="Admin" class="btn btn-danger">Back to dashboard</a>
+    <h4>Survey information</h4>
+    <div>
+        <a href="/Admin/EditSurvey/@Model.Survey.SurveyId" class="btn btn-default">Edit survey details</a>
+        <form class="form" role="form">
+            <div class="text-danger"></div>
+            <div class="form-group">
+                <span>Survey title</span>
+                <input class="form-control" value="@Model.Survey.Title" type="text" disabled/>
+            </div>
+            <div class="form-group">
+                <span>Survey description</span>
+                <input class="form-control" value="@Model.Survey.Description" type="text" disabled/>
+            </div>
+            <div class="form-group">
+                <span>Minimal age</span>
+                <input class="form-control" value="@Model.Survey.RequiredMinAge" type="number" disabled/>
+            </div>
+            <div class="form-group">
+                <span>Maximal age</span>
+                <input class="form-control" value="@Model.Survey.RequiredMaxAge" type="number" disabled/>
+            </div>
+            <div class="form-group">
+                <label><input type="checkbox" checked="@Model.Survey.RequiredPositiveUserRating" /> Survey for users with positive rating?</label>
+                <span class="text-danger"></span>
+            </div>
+
+            @{
+                string Gender = "Gender";
+                switch (Model.Survey.RequiredGender)
+                {
+                    case 0:
+                        Gender = "Both genders";
+                        break;
+                    case 1:
+                        Gender = "Male only";
+                        break;
+                    case 2:
+                        Gender = "Female only";
+                        break;
+
+                }
+                <div class="form-group">
+                    <input class="form-control" value="@Gender" type="text" disabled />
+                    <span class="text-danger"></span>
+                </div>
+            }
+        </form>
+    </div>
+    <hr />
+    <h3>Survey questions</h3>
+    <div class="row">
+        <div>
+            <a href="/Admin/AddSurveyQuestion/@Model.Survey.SurveyId" class="btn btn-default">Add new question</a>
+        </div>
+        @for (int i = 0; i < Model.Questions.Count; i++)
+        {
+            <div class="col-xs-12">
+                <div id="formGroupusername" class="form-group">
+                    <label for="username" class="col-md-2 control-label">Question title</label>
+                    <div class="col-md-9">
+                        <div class="input-group">
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                            <input id="username" name="username" type="text" class="form-control" value="@Model.Questions[i].Title" />
+                        </div>
+                        <span id="msgusername" class="help-block"></span>
+                    </div>
+                    <div class="col-md-1">
+                        <a href="/Admin/SurveyQuestionInformation/@Model.Questions[i].SurveyQuestionId" class="btn btn-link">Edit</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+</div>
+
+
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

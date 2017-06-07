@@ -1,0 +1,43 @@
+﻿@model ChangeDisplayNameViewModel
+@{
+    ViewData["Title"] = "Change E-mail";
+}
+<div class="Form-Page">
+    <form asp-controller="Manage" asp-action="ChangeDisplayName" method="post" class="form-horizontal">
+        <div class="Form-Container">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div id="formGroupusername" class="form-group">
+                <label class="col-md-4 control-label">Current Display Name</label>
+                <div class="col-md-8">
+                    <div class="input-group">
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                        <input type="text" class="form-control" value="@Model.CurrentDisplayName" disabled />
+                    </div>
+                </div>
+            </div>
+
+            <div id="formGroupusername" class="form-group">
+                <label class="col-md-4 control-label">New Display Name</label>
+                <div class="col-md-8">
+                    <div class="input-group">
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                        <input asp-for="NewDisplayName" type="text" class="form-control" placeholder="New Display Name" />
+                    </div>
+                    <span asp-validation-for="NewDisplayName" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-4 right">
+                    <a asp-controller="Manage" asp-action="Index" class="btn btn-danger btn-block">Cancel</a>
+                </div>
+                <div class="col-md-8">
+                    <button type="submit" class="btn btn-default btn-block">Change Display Name</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

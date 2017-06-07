@@ -1,0 +1,36 @@
+@*@model NodeCubeChat.Models.Ad*@
+
+@{
+    ViewData["Title"] = "Upload image";
+}
+
+<div class="Form-Page">
+    <style>
+        body {
+            background: url('../images/bokeh-bg.jpg');
+        }
+    </style>
+    <div class="Form-Container">
+        <h4>Select images</h4>
+        <div>
+            <div class="col-md-12">
+                <form method="post" asp-action="Upload" asp-controller="User" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <input type="file" name="files" multiple />
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-primary btn-block" value="Submit Image" />
+                    </div>
+                </form>
+            </div>
+            <div class="text-center text-warning">
+                You can upload only .jpg, .jpeg, .png and .gif images!
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

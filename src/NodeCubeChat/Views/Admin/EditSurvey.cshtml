@@ -1,0 +1,60 @@
+﻿@model Survey
+@{
+    ViewData["Title"] = "Edit Survey";
+}
+
+<div class="Form-Page">
+    <div class="Form-Container">
+        <h4>Edit Survey</h4>
+        <div>
+            <form asp-controller="Admin" asp-action="EditSurvey" class="form" role="form" method="post" accept-charset="UTF-8">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <input type="hidden" asp-for="SurveyId" value="@Model.SurveyId" />
+                </div>
+                <div class="form-group">
+                    <input asp-for="Title" class="form-control" placeholder="Survey Title" value="@Model.Title" type="text" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input asp-for="Description" class="form-control" placeholder="Survey Description" value="@Model.Description" type="text" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input asp-for="RequiredMinAge" class="form-control" placeholder="Minimal user age" value="@Model.RequiredMinAge" type="number" />
+                    <span asp-validation-for="RequiredMinAge" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input asp-for="RequiredMaxAge" class="form-control" placeholder="Maximal user age" value="@Model.RequiredMaxAge" type="number" />
+                    <span asp-validation-for="RequiredMaxAge" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label><input asp-for="RequiredPositiveUserRating" type="checkbox" /> Survey for users with positive rating?</label>
+                    <span asp-validation-for="RequiredPositiveUserRating" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <select asp-for="RequiredGender" class="form-control" placeholder="Gender availability">
+                        <option value="0">Both genders</option>
+                        <option value="1">Male only</option>
+                        <option value="2">Female only</option>
+                    </select>
+                    <span asp-validation-for="RequiredGender" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4 right">
+                        <a href="/Admin/SurveyInformation/@Model.SurveyId" class="btn btn-danger btn-block">Cancel</a>
+                    </div>
+                    <div class="col-md-8">
+                        <button type="submit" class="btn btn-primary btn-block">Save survey</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

@@ -1,0 +1,40 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using NodeCubeChat.Data.Extensions
+@using NodeCubeChat.Models
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+
+@{
+    var x = await UserManager.GetUserAsync(User);
+}
+
+@if (SignInManager.IsSignedIn(User))
+{
+
+    <li class="divider"></li>
+    <li>
+        <p onclick="OpenModal('Profile','@x.DisplayName');" class="text-center">@x.DisplayName</p>
+    </li>
+
+    <li class="divider"></li>
+    <li><a href="#" class="" title="Manage" onclick="OpenModal('Settings');">Preferences</a></li>
+    <li class="divider"></li>
+    <li>
+        <form asp-area="" asp-controller="Account" asp-action="LogOff" method="post" id="logoutForm" class="">
+            <button type="submit" class="btn btn-danger btn-block navbar-inverse">Log off</button>
+        </form>
+    </li>
+}
+else
+{
+    <li class="divider"></li>
+    <li>
+        <a asp-area="" asp-controller="Account" asp-action="Login" class="">Log in</a>
+    </li>
+    <li>
+        <a asp-area="" asp-controller="Account" asp-action="Register" class="">Register</a>
+    </li>
+    
+}

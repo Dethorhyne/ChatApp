@@ -1,0 +1,42 @@
+﻿@model AdPackage
+@{
+    ViewData["Title"] = "Edit Ad package";
+}
+
+<div class="Form-Page">
+    <div class="Form-Container">
+        <h4>Edit Ad package</h4>
+        <div>
+            <form asp-controller="Admin" asp-action="EditAdPackage" class="form" role="form" method="post" accept-charset="UTF-8">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <input type="hidden" asp-for="AdPackageId" value="@Model.AdPackageId" />
+                </div>
+                <div class="form-group">
+                    <span>Ad package name</span>
+                    <input asp-for="AdPackageName" class="form-control" placeholder="Ad Package Name" type="text" value="@Model.AdPackageName" />
+                    <span asp-validation-for="AdPackageName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <span>Ad package price</span>
+                    <input asp-for="AdPackagePrice" class="form-control" placeholder="Ad package price" type="number" value="@Model.AdPackagePrice" />
+                    <span asp-validation-for="AdPackagePrice" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4 right">
+                        <a href="/Admin/Index/" class="btn btn-danger btn-block">Cancel</a>
+                    </div>
+                    <div class="col-md-8">
+                        <button type="submit" class="btn btn-primary btn-block">Save changes</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

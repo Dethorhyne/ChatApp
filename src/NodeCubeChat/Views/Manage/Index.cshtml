@@ -1,0 +1,88 @@
+﻿@model IndexViewModel
+@{
+    ViewData["Title"] = "My Account";
+}
+
+<div class="Manage-Container">
+    <h2>@ViewData["Title"]</h2>
+    <hr />
+    <h3>Avatar</h3>
+    <div class="row">
+        <div class="col-xs-12">
+            <!-- Avatar -->
+            <div id="formGroupusername" class="form-group">
+                <label for="username" class="col-md-2 control-label">Avatar</label>
+                <div class="col-md-8">
+                    <div class="input-group">
+                        <p> </p>
+                        <img src="@Model.ProfilePicture" alt="User Avatar">
+                    </div>
+                    <span id="msgusername" class="help-block"></span>
+                </div>
+                <div class="col-md-2">
+                    <a asp-controller="Manage" asp-action="ChangeAvatar" class="btn btn-link">Change</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <h3>Membership</h3>
+    <div class="row">
+        <div class="col-xs-12">               
+            
+            <!-- E-mail -->
+            <div id="formGroupusername" class="form-group">
+                <label for="username" class="col-md-2 control-label">E-mail</label>
+                <div class="col-md-9">
+                    <div class="input-group">
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                        <input id="username" name="username" type="text" class="form-control" value="@Model.EMail" />
+                    </div>
+                    <span id="msgusername" class="help-block"></span>
+                </div>
+                <div class="col-md-1">
+                    <a asp-controller="Manage" asp-action="ChangeEmail" class="btn btn-link">Change</a>
+                </div>
+            </div>
+
+            <!-- PASSWORD -->
+            <div id="formGrouppassword" class="form-group">
+                <label for="password" class="col-md-2 control-label">Password</label>
+                <div class="col-md-9">
+                    <div class="input-group">
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-eye-open"></span></span>
+                        <input id="password" name="password" type="password" class="form-control" value="**********" />
+
+                    </div>
+                    <span id="msgpassword" class="help-block"></span>
+                </div>
+                <div class="col-md-1">
+                    <a asp-controller="Manage" asp-action="ChangePassword" class="btn btn-link">Change</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <hr />
+    <h3>Chat settings</h3>
+    <div class="row">
+        <div class="col-xs-12">
+            <div id="formGroupname" class="form-group">
+                <label for="name" class="col-md-2 control-label">Display Name</label>
+                <div class="col-md-8">
+                    <div class="input-group">
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                        <input id="name" name="name" type="text" class="form-control" value="@Model.DisplayName">
+                    </div>
+                    <span id="msgname" class="help-block"></span>
+                </div>
+                <div class="col-md-2">
+                    <a asp-controller="Manage" asp-action="ChangeDisplayName" class="btn btn-link">Change</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <hr />
+</div>

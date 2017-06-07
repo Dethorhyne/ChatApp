@@ -1,0 +1,104 @@
+@using NodeCubeChat.Models.SurveyViewModels;
+
+@model SurveyModel
+@{
+    ViewData["Title"] = "Surveys";
+
+}
+
+<div class="Manage-Container">
+    <form asp-controller="Survey" asp-action="Execute" method="post">
+        <input type="hidden" asp-for="SurveyId" value="@Model.SurveyId" />
+        <input type="hidden" asp-for="Title" value="@Model.Title" />
+        <h2>@Model.Title</h2>
+        <hr />
+        <input type="hidden" asp-for="Description" value="@Model.Description" />
+        <h3>@Model.Description</h3>
+            <div class="row">
+
+            @for (int i = 0; i < Model.Questions.Count; i++)
+            {
+                <input type="hidden" asp-for="Questions[i].Title" value="@Model.Questions[i].Title" />
+                <input type="hidden" asp-for="Questions[i].Description" value="@Model.Questions[i].Description" />
+                <input type="hidden" asp-for="Questions[i].QuestionId" value="@Model.Questions[i].QuestionId" />
+
+                <label class="col-md-12 control-label">@Model.Questions[i].Title</label>
+                <p class="col-md-12 control-label">@Model.Questions[i].Description</p>
+                <div class="col-xs-12">
+                    @for (int j = 0; j < Model.Questions[i].Options.Count; j++)
+                    {
+                        <input type="hidden" asp-for="Questions[i].Options[j].OptionId" value="@Model.Questions[i].Options[j].OptionId" />
+                        <input type="hidden" asp-for="Questions[i].Options[j].Title" value="@Model.Questions[i].Options[j].Title" />
+                    }
+                    @switch (Model.Questions[i].Type)
+                    {
+                        case "Text":
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                                        @for (int j = 0; j < Model.Questions[i].Options.Count; j++)
+                                        {
+                                            @Html.TextAreaFor(m => m.Questions[i].Options[j].Text, new { @required = "required" });
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            break;
+                        case "Select":
+
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <div class="input-group">
+                                        <select asp-for="Questions[i].SelectAnswer" class="form-control" required>
+                                            @for(int j=0; j < Model.Questions[i].Options.Count;j++)
+                                            {
+                                                <option value="@Model.Questions[i].Options[j].OptionId">@Model.Questions[i].Options[j].Title</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            break;
+                        case "Checkbox":
+
+                            @for (var j = 0; j < Model.Questions[i].Options.Count(); j++)
+                            {
+                                <div class="form-group">
+                                    <div class="form-control">
+                                        @Html.HiddenFor(chk => chk.Questions[i].Options[j].OptionId)
+                                        @Html.CheckBoxFor(chk => chk.Questions[i].Options[j].Checked)
+                                        @Html.DisplayFor(chk => chk.Questions[i].Options[j].Title)
+                                    </div>
+                                </div>
+                            }
+
+                            break;
+                        case "Radio":
+
+                            @for (var j = 0; j < Model.Questions[i].Options.Count(); j++)
+                            {
+                                <div class="form-group">
+                                    <div class="checkbox form-control">
+                                        @Html.HiddenFor(chk => chk.Questions[i].Options[j].OptionId)
+                                        @Html.RadioButtonFor(chk => chk.Questions[i].SelectAnswer, Model.Questions[i].Options[j].OptionId)
+                                        @Html.DisplayFor(chk => chk.Questions[i].Options[j].Title)
+                                    </div>
+                                </div>
+                            }
+
+                            break;
+                    }
+                </div>
+            }
+        </div>
+        <div class="col-xs-12">
+
+            <div class="form-group">
+                <div class="">
+                    <input type="submit" name="Submit" value="Submit Survey" class="form-control btn btn-block btn-success" />
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

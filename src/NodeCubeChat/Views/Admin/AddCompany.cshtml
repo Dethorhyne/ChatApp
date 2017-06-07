@@ -1,0 +1,42 @@
+﻿@using NodeCubeChat.Models.AdminViewModels;
+
+@model EditCompanyViewModel
+@{
+    ViewData["Title"] = "Add new Company";
+}
+
+<div class="Form-Page">
+    <div class="Form-Container">
+        <h4>Add new Survey</h4>
+        <div>
+            <form asp-controller="Admin" asp-action="AddCompany" class="form" role="form" method="post" accept-charset="UTF-8">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <input asp-for="Name" class="form-control" placeholder="Company Name" type="text" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <hr />
+                <h4>Ad packages</h4>
+                @for (var i = 0; i < Model.AdPackages.Count(); i++)
+                {
+                    <div class="form-group">
+                        <div class="checkbox form-control">
+                            @Html.HiddenFor(chk => chk.AdPackages[i].Id)
+                            @Html.CheckBoxFor(chk => chk.AdPackages[i].Checked)
+                            @Html.DisplayFor(chk => chk.AdPackages[i].Name)
+                        </div>
+                    </div>
+                }
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-block">Add new Company</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

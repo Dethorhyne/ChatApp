@@ -1,0 +1,68 @@
+﻿@using NodeCubeChat.Models.AdminViewModels;
+
+@model SurveyQuestionViewModel
+@{
+    ViewData["Title"] = "Survey Question information";
+}
+
+<div class="Manage-Container">
+    <a asp-action="Index" asp-controller="Admin" class="btn btn-danger">Back to dashboard</a>
+    <a href="/Admin/SurveyInformation/@Model.Question.SurveyId" class="btn btn-danger">Back to Survey overview</a>
+    <h4>Survey Question information</h4>
+    <div>
+        <div>
+            <a href="/Admin/EditSurveyQuestion/@Model.Question.SurveyQuestionId" class="btn btn-link">Edit question details</a>
+        </div>
+        <form class="form" role="form">
+            <div class="text-danger"></div>
+            <div class="form-group">
+                <span>Question title</span>
+                <input class="form-control" value="@Model.Question.Title" type="text" disabled />
+            </div>
+            <div class="form-group">
+                <span>Question description</span>
+                <input class="form-control" value="@Model.Question.Description" type="text" disabled />
+            </div>
+            <div class="form-group">
+                <span>Question type</span>
+                <input class="form-control" value="@Model.Question.Type" type="text" disabled />
+            </div>
+        </form>
+    </div>
+    @if (Model.Question.Type != "Text")
+    {
+        <hr />
+        <h3>Question options</h3>
+        <div class="row">
+            <div>
+                <a href="/Admin/AddSurveyOption/@Model.Question.SurveyQuestionId" class="btn btn-default">Add new option</a>
+            </div>
+            @for (int i = 0; i < Model.Options.Count; i++)
+            {
+                <div class="col-xs-12">
+                    <div id="formGroupusername" class="form-group">
+                        <label for="username" class="col-md-2 control-label">Option title</label>
+                        <div class="col-md-9">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                                <input id="username" name="username" type="text" class="form-control" value="@Model.Options[i].Title" />
+                            </div>
+                            <span id="msgusername" class="help-block"></span>
+                        </div>
+                        <div class="col-md-1">
+                            <a href="/Admin/EditSurveyOption/@Model.Options[i].SurveyOptionId" class="btn btn-link">Edit</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    
+
+</div>
+
+
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

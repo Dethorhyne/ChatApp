@@ -1,0 +1,44 @@
+﻿@using NodeCubeChat.Models.UserViewModels;
+@{
+    ViewData["Title"] = "My Account";
+}
+
+@model ImageViewModel
+
+<div class="Manage-Container">
+    <h2>@Model.ImageOwner.DisplayName's photo:</h2>
+    <hr />
+    <img src="@Model.Image.ServerPath" />
+    
+    @if(Model.Rating>0)
+    {
+        <p>Image Rating: @Model.Rating</p>
+    }
+    @if(!Model.Owner)
+    {
+        <div>
+            <form asp-action="ImageRate" method="post">
+                <input type="hidden" name="Rating" value="1" />
+                <input type="submit" value="1"/>
+            </form>
+            <form asp-action="ImageRate" method="post">
+                <input type="hidden" name="Rating" value="2" />
+                <input type="submit" value="2" />
+            </form>
+            <form asp-action="ImageRate" method="post">
+                <input type="hidden" name="Rating" value="3" />
+                <input type="submit" value="3" />
+            </form>
+            <form asp-action="ImageRate" method="post">
+                <input type="hidden" name="Rating" value="4" />
+                <input type="submit" value="4" />
+            </form>
+            <form asp-action="ImageRate" method="post">
+                <input type="hidden" name="Rating" value="5" />
+                <input type="submit" value="5" />
+            </form>
+        </div>
+    }
+
+    <hr />
+</div>

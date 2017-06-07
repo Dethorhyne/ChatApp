@@ -1,0 +1,49 @@
+﻿@using NodeCubeChat.Models.HomeViewModels;
+@{
+    ViewData["Title"] = "Home Page";
+    
+}
+@model HistoryViewModel
+
+
+<script>
+</script>
+
+<div class="container">
+    <aside class="sidebar" style="position:fixed; top:0px; left:0px;right:0px; z-index:2">
+        <div class="Ad-Chat-Sidebar-Bottom"></div>
+        <div class="aside-container" style="overflow-y:auto;">
+            <h1>@Model.RoomName - Chat History</h1>
+            <ul>
+                <li>
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-default">Back to chat</a>
+                </li>
+            </ul>
+        </div>
+    </aside>
+    <main style="width:100%; padding-top:90px;">
+        <div class="Ad-Chat-Right"></div>
+        <div class="chat-container" id="ChatContainer" style="height:100%;">
+            <ul class="chat" id="ChatMessages">
+                @foreach (ChatMessageTemplate message in Model.Messages)
+                {
+                    <li class="left clearfix">
+                        <span class="chat-img pull-left">
+                            <img src="@message.ProfilePicture" alt="User Avatar">
+                        </span>
+                        <div class="chat-body clearfix">
+                            <div class="header">
+                                <strong class="primary-font"><a href="/User/Profile/@message.DisplayName">@message.DisplayName</a></strong>
+                                <small class="pull-right text-muted"><i class="fa fa-clock-o"></i><time title="@message.Timestamp" datetime="@message.Timestamp.ToString("o")"></time></small>
+                            </div>
+                            <p>
+                                @message.Message
+                            </p>
+                        </div>
+                    </li>
+                }
+                
+            </ul>
+        </div>
+    </main>
+</div>

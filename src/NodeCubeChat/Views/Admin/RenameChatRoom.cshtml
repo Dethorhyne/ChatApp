@@ -1,0 +1,33 @@
+﻿@model ChatRoom
+@{
+    ViewData["Title"] = "Rename Chat room";
+}
+
+<div class="Form-Page">
+    <div class="Form-Container">
+        <h4>Rename Chat room</h4>
+        <div>
+            <form asp-controller="Admin" asp-action="RenameChatRoom" class="form" role="form" method="post" accept-charset="UTF-8">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <input asp-for="RoomName" class="form-control" placeholder="Chat room Title" type="text" />
+                    <span asp-validation-for="RoomName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4 right">
+                        <a href="/Admin/Index/" class="btn btn-danger btn-block">Cancel</a>
+                    </div>
+                    <div class="col-md-8">
+                        <button type="submit" class="btn btn-primary btn-block">Rename new room</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

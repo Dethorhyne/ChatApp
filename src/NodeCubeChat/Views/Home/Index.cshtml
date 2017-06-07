@@ -1,0 +1,282 @@
+﻿@using NodeCubeChat.Models.HomeViewModels;
+@{
+    ViewData["Title"] = "Home Page";
+}
+@model ChatIndexViewModel
+
+
+<script src="http://52.166.140.100:3000/socket.io/socket.io.js"></script>
+@*<script src="http://localhost:3000/socket.io/socket.io.js"></script>*@
+    <script>
+        var user = { name: "@Model.DisplayName", avatar: "@Model.ProfilePicture", room : "@Model.RoomName" };
+        var socket = io.connect('http://52.166.140.100:3000')
+        //var socket = io.connect('http://localhost:3000')
+        socket.emit("join", user);
+
+        socket.emit("load-current-users");
+
+        function SendMessage() {
+            socket.emit('chat_message', $('#UserChatMessage').val());
+            AddMessageToDB($('#UserChatMessage').val(), user.room);
+            $('#UserChatMessage').val('');
+        }
+        function SendVideo() {
+            var videoid = GetYoutubeVideoId($('#UserVideoLink').val());
+            socket.emit('video_link', videoid);
+            AddMessageToDB("[YTVID[https://www.youtube.com/watch?v="+videoid+"]VIDID["+videoid+"]]", user.room);
+            $('#UserVideoLink').val('');
+        }
+
+        socket.on('AppendVideoLink', function (videolink) {
+
+            var ul = document.getElementById("ChatMessages");
+            var li = document.createElement("li");
+
+            var date = new Date();
+            formatDate = date.toISOString();
+
+            var chatTemplate = "<li class='left clearfix'><span class='chat-img pull-left'><img src='" + videolink.avatar + "' alt='User Avatar'></span><div class='chat-body clearfix'><div class='header'><strong class='primary-font'><a href='/User/Profile/" + videolink.name + "' >" + videolink.name + "</a></strong><small class='pull-right text-muted'><i class='fa fa-clock-o'></i><time title='" + date.toLocaleString() + "' datetime='" + formatDate + "'> Right now</time></small></div><iframe width='100%' height='315' src='https://www.youtube.com/embed/" + videolink.video + "' frameborder='0'></iframe></div></li>";
+
+            li.innerHTML = chatTemplate;
+            li.setAttribute("class", "left clearfix"); // added line
+            ul.appendChild(li);
+
+            $("#ChatContainer").animate({ scrollTop: $('#ChatContainer').prop("scrollHeight") }, 1000);
+        });
+        socket.on('AppendChatMessage', function (msg) {
+
+            var ul = document.getElementById("ChatMessages");
+            var li = document.createElement("li");
+
+            var date = new Date();
+            formatDate = date.toISOString();
+
+            var chatTemplate = "<span class=\"chat-img pull-left\"><img src=\"" + msg.avatar + "\" alt=\"User Avatar\"></span><div class=\"chat-body clearfix\"><div class=\"header\"><strong cla<strong class=\"primary-font\" style=\"cursor:pointer;\" onclick=\"OpenModal('Profile','"+msg.name+"')\">"+msg.name+"</strong><small class=\"pull-right text-muted\"><i class=\"fa fa-clock-o\"></i><time title=\"" + date.toLocaleString() + "\" datetime=\"" + formatDate + "\"> Right now</time></small></div><p>" + msg.message + "</p></div>";
+
+            li.innerHTML = chatTemplate;
+            li.setAttribute("class", "left clearfix"); // added line
+            ul.appendChild(li);
+
+            $("#ChatContainer").animate({ scrollTop: $('#ChatContainer').prop("scrollHeight") }, 1000);
+        });
+
+
+        socket.on('user_joined_chat', function (username) {
+
+            var ul = document.getElementById("ActiveUsers");
+            var li = document.createElement("li");
+
+            var chatTemplate = "<li class=\"user-in-chat\"><p onclick=\"OpenModal('Profile','" + username + "')\">" + username + "</p></li>";
+
+            li.innerHTML = chatTemplate;
+            ul.appendChild(li);
+
+        });
+
+        socket.on('active-users', function (usersinchat) {
+
+            for (var i = 0; i < usersinchat.length; i++)
+            {
+                var ul = document.getElementById("ActiveUsers");
+                var li = document.createElement("li");
+
+                var chatTemplate = "<li class=\"user-in-chat\"><p onclick=\"OpenModal('Profile','" + usersinchat[i] + "')\">" + usersinchat[i] + "</p></li>";
+
+                li.innerHTML = chatTemplate;
+                ul.appendChild(li);
+            }
+
+        });
+
+        socket.on('user_left_chat', function (username) {
+
+            $(".user-in-chat:contains('" + username + "')").remove();
+        });
+    </script>
+
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog fa-2x" style="line-height:50px;"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a asp-controller="Home" asp-action="About">About</a></li>
+                            <li><a asp-controller="Home" asp-action="Contact">Contact us</a></li>
+                            <li><a asp-controller="Home" asp-action="Report">Report a problem</a></li>
+                            @await Html.PartialAsync("_LoginPartial")
+                            <li class="divider"></li>
+                            <li><p class="text-center">&copy;2016 ChatHR</p></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <h1 style="position: fixed; margin: 5px; top: 0px; left: 50px; "><a href="/">ChatHR</a></h1>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right"></ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+
+    <div class="body body-content">
+        <div class="container">
+            <div class="chat-ad-left">
+
+            </div>
+            <aside id="RoomSidebar" class="sidebar rooms">
+                <h1>NodeCubeChat</h1>
+                <button onclick="CloseSidebar('#RoomSidebar')"><i class="fa fa-times"></i></button>
+                <div class="aside-container">
+                    <ul>
+
+                        @if (Model.IsCurrentUserAdmin)
+                        {
+                            <li>
+                                <a asp-controller="Admin" asp-action="Index" class="btn btn-default">Admin panel</a>
+                            </li>
+                            <li>
+                                <a href="/Home/History/@Model.RoomName" class="btn btn-default">Chat history</a>
+                            </li>
+                        }
+                        <li class="sidebar-divider">
+                        <li>
+                            <a asp-controller="Private" asp-action="Chat">Private messages</a>
+                        </li>
+                        <li class="sidebar-divider">
+                        </li>
+                        @foreach (string room in Model.Rooms)
+                        {
+                            <li>
+                                <a style="display:block;" href="/Home/Index/@room">@room</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </aside>
+            <main>
+                <div Id="RoomInfo">
+                    <button class="RoomsButton" onclick="OpenSidebar('#RoomSidebar')"><i class="fa fa-sign-in"></i></button>
+                    <div class="RoomName">
+                        <h3>@Model.RoomName</h3>
+                    </div>
+                    <button class="UsersButton" onclick="OpenSidebar('#UserSidebar')"><i class="fa fa-users"></i></button>
+                </div>
+                <div class="chat-container" id="ChatContainer">
+                    <ul class="chat" id="ChatMessages">
+
+                        @foreach (ChatMessageTemplate message in Model.LastMessages)
+                        {
+                            <li class="left clearfix">
+                                <span class="chat-img pull-left">
+                                    <img src="@message.ProfilePicture" alt="User Avatar">
+                                </span>
+                                <div class="chat-body clearfix">
+                                    <div class="header">
+                                        <strong class="primary-font" style="cursor:pointer;" onclick="OpenModal('Profile','@message.DisplayName')">@message.DisplayName</strong>
+                                        <small class="pull-right text-muted"><i class="fa fa-clock-o"></i><time title="@message.Timestamp" datetime="@message.Timestamp.ToString("o")"></time></small>
+                                    </div>
+                                    @if (message.Message.StartsWith("[YTVID[https://www.youtube.com/watch?v="))
+                                    {
+                                        string videoid = message.Message;
+                                        videoid = videoid.Remove(0, videoid.IndexOf("VIDID[") + 6);
+                                        videoid = videoid.Substring(0, videoid.IndexOf("]"));
+
+                                        videoid = "https://www.youtube.com/embed/" + videoid;
+
+                                        //AddMessageToDB("" + videoid + "]VIDID[]]", user.room);
+                                        <iframe width="100%" height="250" src="@videoid" frameborder="0"></iframe>
+                                    }
+                                    else
+                                    {
+
+
+                                    }
+                                    <p>
+                                        @message.Message
+                                    </p>
+                                </div>
+                            </li>
+                        }
+
+
+                        @*<li class="left clearfix">
+                            <span class="chat-img pull-left">
+                                <img src="@HelperMethods.BotImageUrl" alt="User Avatar">
+                            </span>
+                            <div class="chat-body clearfix">
+                                <div class="header">
+                                    <strong class="primary-font">Google Ads Bot</strong>
+                                    <small class="pull-right text-muted"></small>
+                                </div>
+                                <div class="Ad-Chat-Top center-block"></div>
+                            </div>
+                        </li>*@
+                    @*<li class="left clearfix">
+                        <span class="chat-img pull-left">
+                            <img src="@Model.ProfilePicture" alt="User Avatar">
+                        </span>
+                        <div class="chat-body clearfix">
+                            <div class="header">
+                                <strong class="primary-font"><a href="/User/Profile/@Model.DisplayName">@Model.DisplayName</a></strong>
+                                <small class="pull-right text-muted"><i class="fa fa-clock-o"></i><time datetime="2016-08-07T14:33:32.263Z"></time></small>
+                            </div>
+                            <iframe width="100%" height="315" src="https://www.youtube.com/embed/ftJZomwDhxQ" frameborder="0"></iframe>
+                        </div>
+                    </li>
+                    <li class="left clearfix">
+                        <span class="chat-img pull-left">
+                            <img src="@Model.ProfilePicture" alt="User Avatar">
+                        </span>
+                        <div class="chat-body clearfix">
+                            <div class="header">
+                                <strong class="primary-font"><a href="/User/Profile/@Model.DisplayName">@Model.DisplayName</a></strong>
+                                <small class="pull-right text-muted"><i class="fa fa-clock-o"></i><time datetime="2016-08-07T14:33:32.263Z"></time></small>
+                            </div>
+                            <p>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                            </p>
+                        </div>
+                    </li>*@
+                </ul>
+            </div>
+            <div id="SendVideo" class="hidden">
+                <div class="input-group">
+                    <input id="UserVideoLink" class="form-control border no-shadow no-rounded" placeholder="Type in the full youtube video link">
+                    <span class="input-group-btn">
+                        @*<button id="SendMessageBtn" class="btn btn-success no-rounded" type="button" onclick="appendChatMessage('@Model.ProfilePicture','@Model.DisplayName');">Send</button>*@
+                        <button id="SendMessageBtn" class="btn btn-success no-rounded" type="button" onclick="SendVideo();">Send</button>
+                        <button id="SendVideoBtn" class="btn btn-danger no-rounded" type="button" onclick="CloseVideoDialog();"><i class="fa fa-times"></i></button>
+                    </span>
+                </div><!-- /input-group -->
+            </div>
+            <div class="chat-input">
+                <div class="chat-box bg-white">
+                    <div class="input-group">
+                        <input id="UserChatMessage" class="form-control border no-shadow no-rounded" placeholder="Type your message here">
+                        <span class="input-group-btn">
+                            @*<button id="SendMessageBtn" class="btn btn-success no-rounded" type="button" onclick="appendChatMessage('@Model.ProfilePicture','@Model.DisplayName');">Send</button>*@
+                            <button id="SendMessageBtn" class="btn btn-success no-rounded" type="button" onclick="SendMessage();">Send</button>
+                            <button id="SendVideoBtn" class="btn btn-success no-rounded" type="button" title="Send a YouTube Video link" onclick="OpenVideoDialog();"><i class="fa fa-link"></i></button>
+                        </span>
+                    </div><!-- /input-group -->
+                </div>
+            </div>
+
+        </main>
+        <aside id="UserSidebar" class="sidebar users">
+            <h1>Active users</h1>
+            <button onclick="CloseSidebar('#UserSidebar')"><i class="fa fa-times"></i></button>
+            <div class="aside-container">
+                <ul id="ActiveUsers">
+                    @*<li class="user-in-chat"><p onclick="OpenModal('Profile','@Model.DisplayName')">@Model.DisplayName <span style="color:#454545">[@Model.RoomName]</span></p></li>*@
+                </ul>
+            </div>
+        </aside>
+        <div class="chat-ad-left">
+
+        </div>
+    </div>
+
+</div>

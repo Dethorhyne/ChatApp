@@ -1,0 +1,45 @@
+﻿@model SurveyOption
+@{
+    ViewData["Title"] = "Edit Survey Option";
+}
+
+<div class="Form-Page">
+    <div class="Form-Container">
+        <h4>Edit Option</h4>
+        <div>
+            <form asp-controller="Admin" asp-action="EditSurveyOption" class="form" role="form" method="post" accept-charset="UTF-8">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <input asp-for="SurveyOptionId" type="hidden" value="@Model.SurveyOptionId" />
+                </div>
+                <div class="form-group">
+                    <input asp-for="SurveyQuestionId" type="hidden" value="@Model.SurveyQuestionId" />
+                </div>
+                <div class="form-group">
+                    <span>Question Title</span>
+                    <input asp-for="Title" class="form-control" placeholder="Question Title" type="text" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <div class="checkbox form-control">
+                        <label><input asp-for="AttachedTextbox" type="checkbox" />Should there be a textbox attached to this option?</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-4 right">
+                        <a href="/Admin/SurveyQuestionInformation/@Model.SurveyQuestionId" class="btn btn-danger btn-block">Cancel</a>
+                    </div>
+                    <div class="col-md-8">
+                        <button type="submit" class="btn btn-primary btn-block">Edit option</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

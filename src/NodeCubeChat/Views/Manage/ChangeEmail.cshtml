@@ -1,0 +1,55 @@
+﻿@model ChangeEmailViewModel
+@{
+    ViewData["Title"] = "Change E-mail";
+}
+<div class="Form-Page">
+    <form asp-controller="Manage" asp-action="ChangeEmail" method="post" class="form-horizontal">
+        <div class="Form-Container">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div id="formGroupusername" class="form-group">
+                <label class="col-md-4 control-label">Current E-mail</label>
+                <div class="col-md-8">
+                    <div class="input-group">
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                        <input type="text" class="form-control" value="@Model.CurrentEmail" disabled />
+                    </div>
+                </div>
+            </div>
+
+            <div id="formGroupusername" class="form-group">
+                <label class="col-md-4 control-label">New E-mail</label>
+                <div class="col-md-8">
+                    <div class="input-group">
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                        <input asp-for="NewEmail" type="text" class="form-control" placeholder="New E-mail" />
+                    </div>
+                    <span asp-validation-for="NewEmail" class="text-danger"></span>
+                </div>
+            </div>
+
+            <!-- PASSWORD -->
+            <div id="formGrouppassword" class="form-group">
+                <label class="col-md-4 control-label">Confirm New E-mail</label>
+                <div class="col-md-8">
+                    <div class="input-group">
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                        <input asp-for="ConfirmNewEmail" type="text" class="form-control" placeholder="New E-mail" />
+                    </div>
+                    <span asp-validation-for="ConfirmNewEmail" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-4 right">
+                    <a asp-controller="Manage" asp-action="Index" class="btn btn-danger btn-block">Cancel</a>
+                </div>
+                <div class="col-md-8">
+                    <button type="submit" class="btn btn-default btn-block">Change E-mail address</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

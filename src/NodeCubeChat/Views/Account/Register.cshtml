@@ -1,0 +1,117 @@
+﻿@model RegisterViewModel
+@{
+    ViewData["Title"] = "Register";
+}
+@inject SignInManager<ApplicationUser> SignInManager
+
+<div class="Form-Page">
+    <style>
+        body {
+            background: url('../images/bokeh-bg.jpg');
+        }
+    </style>
+    <div class="Ad-Login-Left"></div>
+    <div class="Ad-Login-Right"></div>
+    <div class="Form-Container">
+        <h4>Register your account</h4>
+        <div>
+            <div class="col-md-12">
+                @{
+                    var loginProviders = SignInManager.GetExternalAuthenticationSchemes().ToList();
+                    if (loginProviders.Count > 0)
+                    {
+                        <span>Register via</span>
+                        <div class="social-buttons">
+                            <form asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+                                <div>
+                                    <p>
+                                        @foreach (var provider in loginProviders)
+                                        {
+                                            switch (provider.DisplayName)
+                                            {
+                                                case "Google":
+                                                    <button type="submit" class="btn btn-google" name="provider" value="@provider.AuthenticationScheme" title="Log in using your @provider.DisplayName account">@provider.AuthenticationScheme</button>
+                                                    break;
+                                                case "Facebook":
+                                                    <button type="submit" class="btn btn-facebook" name="provider" value="@provider.AuthenticationScheme" title="Log in using your @provider.DisplayName account">@provider.AuthenticationScheme</button>
+                                                    break;
+                                                case "Twitter":
+                                                    <button type="submit" class="btn btn-twitter" name="provider" value="@provider.AuthenticationScheme" title="Log in using your @provider.DisplayName account">@provider.AuthenticationScheme</button>
+                                                    break;
+                                                default:
+                                                    <button type="submit" class="btn btn-default" name="provider" value="@provider.AuthenticationScheme" title="Log in using your @provider.DisplayName account">@provider.AuthenticationScheme</button>
+                                                    break;
+                                            }
+
+                                        }
+                                    </p>
+                                </div>
+                            </form>
+                        </div>
+                        <span>or fill out this form:</span>
+                    }
+                }
+                <form asp-controller="Account" asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]" class="form" role="form" method="post" accept-charset="UTF-8" id="login-nav">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="form-group">
+                        <input asp-for="Username" class="form-control" placeholder="Username" />
+                        <span asp-validation-for="Username" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input asp-for="Email" class="form-control" placeholder="E-mail Address" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input asp-for="DisplayName" class="form-control" placeholder="Nickname that everyone will see" />
+                        <span asp-validation-for="DisplayName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input asp-for="Password" class="form-control" placeholder="Password" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input asp-for="ConfirmPassword" class="form-control" placeholder="Confirm your password" />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+                    <hr />
+                    <div class="form-group">
+                        <input asp-for="FirstName" class="form-control" placeholder="Real first name" />
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input asp-for="LastName" class="form-control" placeholder="Real last name" />
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input asp-for="City" class="form-control" placeholder="Where are you from?" />
+                        <span asp-validation-for="City" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input required asp-for="DateOfBirth" class="form-control" placeholder="When were you born" type="date" />
+                        <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <select required class="form-control" asp-for="Gender">
+                            <option value="">Gender</option>
+                            <option value="1">Male</option>
+                            <option value="2">Female</option>
+                        </select>
+                        <span asp-validation-for="Gender" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary btn-block">Register account</button>
+                    </div>
+                </form>
+            </div>
+            <div class="text-center">
+                 <p> </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

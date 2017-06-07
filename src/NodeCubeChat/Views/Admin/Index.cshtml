@@ -1,0 +1,122 @@
+@using NodeCubeChat.Models.AdminViewModels
+@{
+    ViewData["Title"] = "Admin Dashboard";
+
+}
+@model AdminDashboardViewModel
+
+
+<div class="Manage-Container">
+    <h2>@ViewData["Title"]</h2>
+    <hr />
+    <h3>Ad packages</h3>
+    <div class="row">
+        <div>
+            <a asp-action="AddAdPackage" asp-controller="Admin" class="btn btn-default">Add new Ad package</a>
+        </div>
+        @for (int i = 0; i < Model.AdPackages.Count; i++)
+        {
+            <div class="col-xs-12">
+                <div id="formGroupusername" class="form-group">
+                    <label for="username" class="col-md-2 control-label">Survey title</label>
+                    <div class="col-md-9">
+                        <div class="input-group">
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                            <input id="username" name="username" type="text" class="form-control" value="@Model.AdPackages[i].AdPackageName - EUR @Model.AdPackages[i].AdPackagePrice" />
+                        </div>
+                        <span id="msgusername" class="help-block"></span>
+                    </div>
+                    <div class="col-md-1">
+                        <a href="/Admin/EditAdPackage/@Model.AdPackages[i].AdPackageId" class="btn btn-link">Details</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <hr />
+    <h3>Companies in Ad programme</h3>
+    <div class="row">
+        <div>
+            <a asp-action="AddCompany" asp-controller="Admin" class="btn btn-default">Add new company</a>
+        </div>
+        @for (int i = 0; i < Model.Companies.Count; i++)
+        {
+            string packages = "";
+            foreach (string package in Model.CompanyAdPackages[i])
+            {
+                packages += " " + package;
+            }
+            <div class="col-xs-12">
+                    <div id="formGroupusername" class="form-group">
+                        <label for="username" class="col-md-2 control-label">@Model.Companies[i].Name</label>
+                        <div class="col-md-9">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                                <input id="username" name="username" type="text" class="form-control" value="@packages" />
+                            </div>
+                            <span id="msgusername" class="help-block"></span>
+                        </div>
+                        <div class="col-md-1">
+                            <a href="/Admin/EditCompany/@Model.Companies[i].CompanyId" class="btn btn-link">Edit</a>
+                        </div>
+                    </div>
+            </div>
+        }
+    </div>
+    <hr />
+    <h3>Surveys</h3>
+    <div class="row">
+        <div>
+            <a asp-action="AddSurvey" asp-controller="Admin" class="btn btn-default">Add new survey</a>
+        </div>
+        @for (int i = 0; i < Model.Surveys.Count; i++)
+        {
+        <div class="col-xs-12">
+                <div id="formGroupusername" class="form-group">
+                    <label for="username" class="col-md-2 control-label">Survey title</label>
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                            <input id="username" name="username" type="text" class="form-control" value="@Model.Surveys[i].Title" />
+                        </div>
+                        <span id="msgusername" class="help-block"></span>
+                    </div>
+                    <div class="col-md-1">
+                        <a href="/Admin/SurveyInformation/@Model.Surveys[i].SurveyId" class="btn btn-link">Details</a>
+                    </div>
+                    <div class="col-md-1">
+                        <a href="/Admin/PublishSurvey/@Model.Surveys[i].SurveyId" class="btn btn-link">Publish</a>
+                    </div>
+                </div>
+        </div>
+        }
+    </div>
+    <hr />
+    <h3>Chat Rooms</h3>
+    <div class="row">
+        <div>
+            <a asp-action="AddChatRoom" asp-controller="Admin" class="btn btn-default">Add new chat room</a>
+        </div>
+        @for (int i = 0; i < Model.ChatRooms.Count; i++)
+        {
+            <div class="col-xs-12">
+                <div id="formGroupusername" class="form-group">
+                    <label for="username" class="col-md-2 control-label">Survey title</label>
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                            <input id="username" name="username" type="text" class="form-control" value="@Model.ChatRooms[i].RoomName" />
+                        </div>
+                        <span id="msgusername" class="help-block"></span>
+                    </div>
+                    <div class="col-md-1">
+                        <a href="/Admin/RenameChatRoom/@Model.ChatRooms[i].ChatRoomId" class="btn btn-link">Rename</a>
+                    </div>
+                    <div class="col-md-1">
+                        <a href="/Admin/DeleteChatRoom/@Model.ChatRooms[i].ChatRoomId" class="btn btn-link">Delete</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

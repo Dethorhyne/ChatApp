@@ -1,0 +1,51 @@
+﻿@using NodeCubeChat.Models.AdminViewModels;
+
+@model EditCompanyViewModel
+
+@{
+    ViewData["Title"] = "Edit Company Information";
+}
+
+<div class="Form-Page">
+    <div class="Form-Container">
+        <h4>General data</h4>
+        <div>
+            <div class="col-md-12">
+                <form asp-controller="Admin" asp-action="EditCompany" class="form" method="post" accept-charset="UTF-8">
+                    @Html.Hidden("CompanyId",Model.CompanyId)
+                    @Html.Hidden("paidField",Model.paidField)
+                    <div class="form-group">
+                        <input asp-for="Name" class="form-control" value="@Model.Name" placeholder="Company Name"/>
+                    </div>
+                    <div class="form-group">
+                        <input asp-for="Displays" class="form-control" value="@Model.Displays" disabled placeholder="Number of displays"/>
+                    </div>
+                    <div class="form-group">
+                        <input asp-for="Paid" class="form-control" value="@Model.Paid" disabled />
+                    </div>
+                    <hr/>
+                    <h4>Ad packages</h4>
+
+                    @for (var i = 0; i < Model.AdPackages.Count(); i++)
+                    {
+                        <div class="form-group">
+                            <div class="checkbox form-control">
+                                @Html.HiddenFor(chk => chk.AdPackages[i].Id)
+                                @Html.CheckBoxFor(chk => chk.AdPackages[i].Checked)
+                                @Html.DisplayFor(chk => chk.AdPackages[i].Name)
+                            </div>
+                        </div>
+                    }
+                    <div class="form-group">
+                            <button type="submit" class="btn btn-primary btn-block">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+                                        }

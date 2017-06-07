@@ -1,0 +1,162 @@
+﻿@using NodeCubeChat.Models.UserViewModels;
+@{
+    ViewData["Title"] = "My Account";
+
+    string rated = "No";
+    if(Model.DidCurrentUserRateThisUser)
+    {
+        rated = "Yes";
+    }
+}
+
+@model ProfileViewModel
+
+<div class="Manage-Container">
+    <h2>@Model.DisplayName</h2>
+    @if (!Model.Self)
+    {
+        <div class="Rating" id="RatingOverview" data-rated="@rated">
+            <button id="UpvoteUser" type="submit" onclick="UpvoteUser('@Model.DisplayName')" ><i class="fa fa-thumbs-up"></i></button>
+            <p id="UserRatingCount">@Model.Rating</p>
+            <button id="DownvoteUser" type="submit" onclick="DownvoteUser('@Model.DisplayName')"><i class="fa fa-thumbs-down"></i></button>
+        </div>
+        <br />
+
+        <a href="/Private/ChatRequest/@Model.DisplayName" class="btn btn-default">Send Private Message</a>
+
+        @if (Model.IsCurrentUserAdmin)
+        {
+            if (!Model.IsUserAdmin)
+            {
+                <a href="/Admin/PromoteToAdmin/@Model.DisplayName" class="btn btn-default">Promote user to admin</a>
+            }
+        }
+    }
+
+    
+   
+    <hr />
+    <h3>Avatar</h3>
+    <div class="row">
+        <div class="col-xs-12">
+            <!-- Avatar -->
+            <div id="formGroupusername" class="form-group">
+                <div class="col-md-5">
+                    <div class="input-group">
+                        <p> </p>
+                        <img src="@Model.ProfilePicture" alt="User Avatar">
+                    </div>
+                    <span id="msgusername" class="help-block"></span>
+                </div>
+                <div class="col-md-5">
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <h3>Image Gallery</h3>
+    <hr />
+    @if (Model.Self)
+    {
+        <a asp-action="Upload" class="btn btn-default">Upload images</a>
+    }
+    @foreach (Image image in Model.Images)
+    {
+        <a href="/User/Image/@image.FileName"> <img src="@image.ServerPath" /></a>
+    }
+
+    @*<hr />
+    <h3>Account Details</h3>
+    <div class="row">
+        <div class="col-xs-12">    
+            <!-- E-mail -->
+            <div id="formGroupusername" class="form-group">
+                <label for="username" class="col-md-2 control-label">E-mail</label>
+                <div class="col-md-10">
+                    <div class="input-group">
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                        <input id="username" name="username" type="text" class="form-control" value="@Model.EMail" />
+                    </div>
+                    <span id="msgusername" class="help-block"></span>
+                </div>
+            </div>            
+            <!-- E-mail -->
+            <div id="formGroupusername" class="form-group">
+                <label for="username" class="col-md-2 control-label">Name</label>
+                <div class="col-md-10">
+                    <div class="input-group">
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                        <input id="username" name="username" type="text" class="form-control" value="@Model.FirstName @Model.LastName" />
+                    </div>
+                    <span id="msgusername" class="help-block"></span>
+                </div>
+            </div>                       
+            <!-- E-mail -->
+            <div id="formGroupusername" class="form-group">
+                <label for="username" class="col-md-2 control-label">Gender</label>
+                <div class="col-md-10">
+                    <div class="input-group">
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                        <input id="username" name="username" type="text" class="form-control" value="@Model.Gender" />
+                    </div>
+                    <span id="msgusername" class="help-block"></span>
+                </div>
+            </div>       
+            <!-- E-mail -->
+            <div id="formGroupusername" class="form-group">
+                <label for="username" class="col-md-2 control-label">City</label>
+                <div class="col-md-10">
+                    <div class="input-group">
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                        <input id="username" name="username" type="text" class="form-control" value="@Model.City" />
+                    </div>
+                    <span id="msgusername" class="help-block"></span>
+                </div>
+            </div>                      
+            <!-- E-mail -->
+            <div id="formGroupusername" class="form-group">
+                <label for="username" class="col-md-2 control-label">Date of Birth</label>
+                <div class="col-md-10">
+                    <div class="input-group">
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+
+                        @{
+                            string dob;
+                            if (Model.DateOfBirth > DateTime.MinValue)
+                            {
+                                dob = Model.DateOfBirth.ToString("dd. MM. yyyy.");
+
+                            }
+                            else
+
+                            {
+                                dob = "Not set";
+
+                            }
+                        }
+                        <input id="username" name="username" type="text" class="form-control" value="@dob" />
+                    </div>
+                    <span id="msgusername" class="help-block"></span>
+                </div>
+            </div>        
+            <!-- E-mail -->
+            <div id="formGroupusername" class="form-group">
+                <label for="username" class="col-md-2 control-label">Interests</label>
+                <div class="col-md-10">
+                    <div class="input-group">
+                        <div id="username" name="username" >
+                            @foreach (string interest in Model.Interests)
+                            {
+                                <span class="User-Interest btn-default btn">@interest</span>
+                            }
+                        </div>
+                    </div>
+                    <span id="msgusername" class="help-block"></span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <hr />*@
+</div>
